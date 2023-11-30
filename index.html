@@ -35,7 +35,7 @@
     </style>
 </head>
 
-<body>
+<body oncontextmenu=self.event.returnValue=false onselectstart="return false">
     <div class="main">
         <noscript>需要启用 JavaScript。</noscript>
         <button id="main-button" onclick="handleButtonClick()" style="margin: 0%;">开启</button>
@@ -205,16 +205,31 @@ document.οncοntextmenu=new Function("event.returnValue=false;"); //禁止右�
 document.onselectstart=new Function("event.returnValue=false;"); //禁止先择,也就是无法复制
 </script>
 
-    <script LANGUAGE="JAVASCRIPT">
-<!--
-loopy()
-function loopy() {
-var s Word =""
-while (sWord != "hibow") {
-sWord = prompt("输入正确密码登陆! ")
-}
-alert("身份识别......允许登陆")
-}
-//-->
-    </script>
+<script type="text/javascript">
+    window.onload = function () {
+        //屏蔽键盘事件
+        document.onkeydown = function () {
+            var e = window.event || arguments[0];
+            //F12
+            if (e.keyCode == 123) {
+                return false;
+                //Ctrl+Shift+I
+            } else if ((e.ctrlKey) && (e.shiftKey) && (e.keyCode == 73)) {
+                return false;
+                //Shift+F10
+            } else if ((e.shiftKey) && (e.keyCode == 121)) {
+                return false;
+                //Ctrl+U
+            } else if ((e.ctrlKey) && (e.keyCode == 85)) {
+                return false;
+            }
+        };
+        //屏蔽鼠标右键
+        document.oncontextmenu = function () {
+            return false;
+        }
+    }
+
+</script>
+    
 </html>
