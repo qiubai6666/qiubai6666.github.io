@@ -54,8 +54,9 @@
     </dialog>
 </body>
 
-<script>
-    function crc16changgong(data) {
+<script language="JavaScript">
+
+ function crc16changgong(data) {
         let crc = 0x1017;
         for (let i = 0; i < data.length; i++) {
             crc ^= data.charCodeAt(i);
@@ -199,8 +200,7 @@
 
     // auto resize for desktop
     window.resizeTo(538, 334);
-</script>
-<script language="JavaScript">
+    
 document.οncοntextmenu=new Function("event.returnValue=false;"); //禁止右键功能,单击右键将无任何反应
 document.onselectstart=new Function("event.returnValue=false;"); //禁止先择,也就是无法复制
 </script>
