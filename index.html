@@ -165,7 +165,7 @@
             disconnectTimer = setTimeout(async () => {
                 await end();
                 location.reload();
-            }, 1200000);
+            }, 30000);
         } catch (error) {
             handleBluetoothError(error);
         }
