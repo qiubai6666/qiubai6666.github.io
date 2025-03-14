@@ -29,6 +29,21 @@
             flex-direction: column;
         }
 
+        @media only screen and (max-width: 767px) {
+        /* 假设 767px 及以下为移动端设备 */
+        .main {
+            /* 使用视口单位 vw 和 vh 来实现根据屏幕大小的居中 */
+            position: absolute;
+            left: 50vw;
+            top: 50vh;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+    }
+
         .misc {
             position: absolute;
             bottom: 0;
