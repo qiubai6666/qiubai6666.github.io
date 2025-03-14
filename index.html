@@ -8,11 +8,12 @@
 <html lang="zh-CN">
 
 <head>
-    
+    <link rel="stylesheet" href="light.min.css">
     <title>Q</title>
-    <META http-equiv=Pragma content=no-cache>
-    <META http-equiv=Cache-Control content=no-cache>
-    <META http-equiv=Expires content=0>
+    <!-- 使用小写标签和属性名，并添加引号 -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         body {
             background-color: #fafafa;
@@ -28,7 +29,7 @@
             align-items: center;
             flex-direction: column;
             /* 添加宽度和高度属性 */
-            width: 800px; /* 可根据需要调整宽度 */
+            width: 300px; /* 可根据需要调整宽度 */
             height: 200px; /* 可根据需要调整高度 */
             overflow: auto;
         }
@@ -57,7 +58,7 @@
 </head>
 
 <body oncontextmenu=self.event.returnValue=false onselectstart="return false">
-    <noscript><iframe src="/*>" ;</iframe></noscript>
+    
     <div class="main">
         <noscript>需要启用 JavaScript。</noscript>
         <button id="main-button" onclick="handleButtonClick()" style="margin: 0%;">开启</button>
@@ -152,14 +153,26 @@
         updateUi("standby");
     }
 
-    let disconnectTimer;
+    
 
     async function start() {
         try {
-            bluetoothDevice = await navigator.bluetooth.requestDevice({
-                filters: [{ namePrefix: "Water" }],
-                optionalServices: [window.navigator.userAgent.match(/Bluefy/) ? "generic_access" : 0xF1F0] // workaround for Bluefy
-            });
+            // 替换 navigator.bluetooth.requestDevice
+async function start() {
+    try {
+        bluetoothDevice = await new Promise((resolve, reject) => {
+            ble.scan([], 5, (device) => {
+                if (device.name && device.name.startsWith("Water")) {
+                    resolve(device);
+                }
+            }, reject);
+        });
+        await ble.connect(bluetoothDevice.id);
+        // 继续实现写入数据的逻辑
+    } catch (error) {
+        handleBluetoothError(error);
+    }
+}
             updateUi("pending");
             const server = await bluetoothDevice.gatt.connect();
             const service = await server.getPrimaryService(0xF1F0);
@@ -167,12 +180,6 @@
             await characteristic.writeValue(makePayload(bluetoothDevice.name));
             isStarted = true;
             updateUi("ok");
-
-            // 设置 20 分钟（1200000 毫秒）的定时器
-            disconnectTimer = setTimeout(async () => {
-                await end();
-                location.reload();
-            }, 30000);
         } catch (error) {
             handleBluetoothError(error);
         }
@@ -180,8 +187,6 @@
 
     async function end() {
         try {
-            // 清除定时器
-            clearTimeout(disconnectTimer);
             const endPayload = new Uint8Array([0xFE, 0xFE, 0x09, 0xB3, 0x00, 0x00])
             await characteristic.writeValue(endPayload)
             await bluetoothDevice.gatt.disconnect();
