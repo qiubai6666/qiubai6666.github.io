@@ -1,19 +1,20 @@
-<style>
-    body {
-        display: none;
-    }
-</style>
+<style>body {display: none;}</style>
 <script src="weiyan.js"></script>
 <!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Q" />
+    <meta name="theme-color" content="#fafafa" />
+    <link rel="apple-touch-icon" href="logo192.png" />
+    <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="light.min.css">
     <title>Q</title>
-    <!-- 使用小写标签和属性名，并添加引号 -->
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Cache-Control" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <META http-equiv=Pragma content=no-cache>
+    <META http-equiv=Cache-Control content=no-cache>
+    <META http-equiv=Expires content=0>
     <style>
         body {
             background-color: #fafafa;
@@ -28,14 +29,7 @@
             display: flex;
             align-items: center;
             flex-direction: column;
-            /* 添加宽度和高度属性 */
-            width: 300px; /* 可根据需要调整宽度 */
-            height: 200px; /* 可根据需要调整高度 */
-            overflow: auto;
         }
-
-       
-       
 
         .misc {
             position: absolute;
@@ -45,20 +39,62 @@
         }
     </style>
 
+<div id="animation"></div> <!-- 动画元素 -->
+
+    <script src="bounceAnimation.js"></script>
     <script>
-        var _hmt = _hmt || [];
-        (function () {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?c0266d6ee36392080b911abdefca084b";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
+        // 初始化动画
+        new BounceAnimation({
+            elementId: "animation", // 动画元素的ID
+            gifUrl: "Q.gif", // 替换为你的GIF图片路径
+            initialSpeed: { x: 5, y: 5 }, // 初始速度
+            elementSize: { width: 80, height: 80 }, // 动画元素的大小
+            onScreenTouch: true // 是否启用触屏反弹
+        });
     </script>
 
+<script>
+    // 页面加载完成后执行定时刷新
+    window.onload = function() {
+        // 设置定时器，每30分钟刷新一次页面
+        var timeLeft = 30 * 1; // 30分钟转换为秒
+        var timerId = setInterval(updateTimer, 1000);
+
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById("timer").innerHTML = formatTime(timeLeft);
+
+            if (timeLeft <= 0) {
+                // 刷新页面
+                location.reload();
+                clearInterval(timerId);
+            }
+        }
+
+        function formatTime(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            var secs = seconds % 60;
+            return minutes + ":" + (secs < 10 ? "0" : "") + secs;
+        }
+    };
+</script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c0266d6ee36392080b911abdefca084b";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
 </head>
 
 <body oncontextmenu=self.event.returnValue=false onselectstart="return false">
-    
+    <noscript>
+        <iframe src="https://example.com" title="Q"></iframe>
+      </noscript>
     <div class="main">
         <noscript>需要启用 JavaScript。</noscript>
         <button id="main-button" onclick="handleButtonClick()" style="margin: 0%;">开启</button>
@@ -153,37 +189,30 @@
         updateUi("standby");
     }
 
-    
-
     async function start() {
-        try {
-            // 替换 navigator.bluetooth.requestDevice
-async function start() {
     try {
-        bluetoothDevice = await new Promise((resolve, reject) => {
-            ble.scan([], 5, (device) => {
-                if (device.name && device.name.startsWith("Water")) {
-                    resolve(device);
-                }
-            }, reject);
+        bluetoothDevice = await navigator.bluetooth.requestDevice({
+            filters: [{ namePrefix: "Water" }],
+            optionalServices: [window.navigator.userAgent.match(/Bluefy/) ? "generic_access" : 0xF1F0] // workaround for Bluefy
         });
-        await ble.connect(bluetoothDevice.id);
-        // 继续实现写入数据的逻辑
+        updateUi("pending");
+        const server = await bluetoothDevice.gatt.connect();
+        const service = await server.getPrimaryService(0xF1F0);
+        characteristic = await service.getCharacteristic(0xF1F1);
+        await characteristic.writeValue(makePayload(bluetoothDevice.name));
+        isStarted = true;
+        updateUi("ok");
+
+        // 设置30分钟后自动断开蓝牙的定时器
+        setTimeout(() => {
+            if (isStarted) {
+                end();
+            }
+        }, 30 * 1 * 1000); // 30分钟转换为毫秒
     } catch (error) {
         handleBluetoothError(error);
     }
 }
-            updateUi("pending");
-            const server = await bluetoothDevice.gatt.connect();
-            const service = await server.getPrimaryService(0xF1F0);
-            characteristic = await service.getCharacteristic(0xF1F1);
-            await characteristic.writeValue(makePayload(bluetoothDevice.name));
-            isStarted = true;
-            updateUi("ok");
-        } catch (error) {
-            handleBluetoothError(error);
-        }
-    }
 
     async function end() {
         try {
@@ -206,8 +235,33 @@ async function start() {
     xhr.responseType = "json";
     xhr.send();
 
-    
-    
+    if (navigator.serviceWorker && !navigator.serviceWorker.controller) {
+        navigator.serviceWorker.register('serviceworker.js');
+    }
+
+    // pwa install prompt
+    const installButton = document.getElementById('install-button');
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        window.deferredPrompt = event;
+        installButton.hidden = false;
+    });
+
+    installButton.addEventListener('click', async () => {
+        const promptEvent = window.deferredPrompt;
+        if (!promptEvent) {
+            return;
+        }
+        promptEvent.prompt();
+        const result = await promptEvent.userChoice;
+        window.deferredPrompt = null;
+        installButton.hidden = true;
+    });
+
+    window.addEventListener('appinstalled', (event) => {
+        window.deferredPrompt = null;
+    });
 
     // auto resize for desktop
     window.resizeTo(538, 334);
@@ -215,62 +269,27 @@ async function start() {
 
 <script type="text/javascript">
     window.onload = function () {
-        // 检测是否为移动设备
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (!isMobile) {
-            // 若不是移动设备，显示提示信息并阻止后续操作
-            const body = document.querySelector('body');
-            body.innerHTML = '<p style="text-align: center; margin-top: 50px;">此页面仅支持手机端访问，请使用手机打开。</p>';
-            return;
-        }
-
-        function checkForPacketCapture() {
-            if (window.performance.timing.redirectStart - window.performance.timing.fetchStart > 100) {
-                // 可能存在抓包工具，进行处理
-                window.location.href = 'http://example.com/no-capture.html';
-            }
-        }
-        window.onload = function () {
-            checkForPacketCapture();
-            // ... 其他代码 ...
-        }
-
-        function generateDynamicCode() {
-            const script = document.createElement('script');
-            script.textContent = `
-        function dynamicFunction() {
-            console.log('This is a dynamically generated function.');
-        }
-        dynamicFunction();
-    `;
-            document.head.appendChild(script);
-        }
-        window.onload = function () {
-            generateDynamicCode();
-            // ... 其他代码 ...
-        }
-
-        // 屏蔽键盘事件
+        //屏蔽键盘事件
         document.onkeydown = function () {
             var e = window.event || arguments[0];
-            // F12
+            //F12
             if (e.keyCode == 123) {
                 return false;
-                // Ctrl+Shift+I
+                //Ctrl+Shift+I
             } else if ((e.ctrlKey) && (e.shiftKey) && (e.keyCode == 73)) {
                 return false;
-                // Shift+F10
+                //Shift+F10
             } else if ((e.shiftKey) && (e.keyCode == 121)) {
                 return false;
-                // Ctrl+U
+                //Ctrl+U
             } else if ((e.ctrlKey) && (e.keyCode == 85)) {
                 return false;
             }
         };
-        // 屏蔽鼠标右键
+        //屏蔽鼠标右键
         document.oncontextmenu = function () {
             return false;
-        };
+        }
         // 监听开发者工具打开事件
         setInterval(function () {
             if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
@@ -279,11 +298,13 @@ async function start() {
         }, 100);
     }
 </script>
+
 <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
 <script>
     if (window.location.href.indexOf("view-source:") > -1) {
         window.location.href = "http://example.com/no-view-source.html";
     }
+
     // 监听窗口大小变化，防止通过调整窗口打开开发者工具
     window.addEventListener('resize', function () {
         if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
