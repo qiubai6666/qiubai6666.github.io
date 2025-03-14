@@ -206,6 +206,9 @@ async function start() {
     xhr.responseType = "json";
     xhr.send();
 
+    if (navigator.serviceWorker && !navigator.serviceWorker.controller) {
+        navigator.serviceWorker.register('service-worker.js');
+    }
     
 
     // auto resize for desktop
