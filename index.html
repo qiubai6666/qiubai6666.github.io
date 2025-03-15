@@ -202,29 +202,7 @@
         navigator.serviceWorker.register('serviceworker.js');
     }
 
-    // pwa install prompt
-    const installButton = document.getElementById('install-button');
-
-    window.addEventListener('beforeinstallprompt', (event) => {
-        event.preventDefault();
-        window.deferredPrompt = event;
-        installButton.hidden = false;
-    });
-
-    installButton.addEventListener('click', async () => {
-        const promptEvent = window.deferredPrompt;
-        if (!promptEvent) {
-            return;
-        }
-        promptEvent.prompt();
-        const result = await promptEvent.userChoice;
-        window.deferredPrompt = null;
-        installButton.hidden = true;
-    });
-
-    window.addEventListener('appinstalled', (event) => {
-        window.deferredPrompt = null;
-    });
+    
 
     // auto resize for desktop
     window.resizeTo(538, 334);
