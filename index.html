@@ -138,7 +138,7 @@
             dialogContent.innerText = "找不到蓝牙硬件，或浏览器不支持。";
 
         } else {
-            dialogContent.innerText = error + "\n\n是什么呢\n\n（这可能是一个Bug，请截图并";
+            dialogContent.innerText = error + "\n\n是什么呢\n\n（这可能是一个Bug）";
 
         }
         document.getElementById("dialog").showModal();
@@ -198,9 +198,7 @@
     xhr.responseType = "json";
     xhr.send();
 
-    if (navigator.serviceWorker && !navigator.serviceWorker.controller) {
-        navigator.serviceWorker.register('serviceworker.js');
-    }
+    
 
     
 
