@@ -161,12 +161,15 @@
         isStarted = true;
         updateUi("ok");
 
-        // 设置30分钟后自动断开蓝牙的定时器
-        setTimeout(() => {
-            if (isStarted) {
+        // 创建Web Worker
+        const worker = new Worker('timerWorker.js');
+        worker.postMessage({action: 'start', duration: 20 * 60 * 1000});
+        
+        worker.onmessage = function(e) {
+            if (e.data === 'timeout' && isStarted) {
                 end();
             }
-        }, 1 * 60 * 1000); // 30分钟转换为毫秒
+        };
     } catch (error) {
         handleBluetoothError(error);
     }
