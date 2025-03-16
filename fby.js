@@ -1,1 +1,74 @@
-//%20%u5408%u5E76%u6240%u6709%u9700%u8981%u5728%u9875%u9762%u52A0%u8F7D%u5B8C%u6210%u540E%u6267%u884C%u7684%u903B%u8F91%0Awindow.addEventListener%28%27load%27%2C%20function%20%28%29%20%7B%0A%20%20%20%20//%20%u68C0%u6D4B%u662F%u5426%u4E3A%u79FB%u52A8%u8BBE%u5907%0A%20%20%20%20const%20isMobile%20%3D%20/Android%7CwebOS%7CiPhone%7CiPad%7CiPod%7CBlackBerry%7CIEMobile%7COpera%20Mini/i.test%28navigator.userAgent%29%3B%0A%20%20%20%20if%20%28%21isMobile%29%20%7B%0A%20%20%20%20%20%20%20%20//%20%u82E5%u4E0D%u662F%u79FB%u52A8%u8BBE%u5907%uFF0C%u663E%u793A%u63D0%u793A%u4FE1%u606F%u5E76%u963B%u6B62%u540E%u7EED%u64CD%u4F5C%0A%20%20%20%20%20%20%20%20const%20body%20%3D%20document.querySelector%28%27body%27%29%3B%0A%20%20%20%20%20%20%20%20body.innerHTML%20%3D%20%27%3Cp%20style%3D%22text-align%3A%20center%3B%20margin-top%3A%2050px%3B%22%3E%u6B64%u9875%u9762%u4EC5%u652F%u6301%u624B%u673A%u7AEF%u8BBF%u95EE%uFF0C%u8BF7%u4F7F%u7528%u624B%u673A%u6253%u5F00%u3002%3C/p%3E%27%3B%0A%20%20%20%20%20%20%20%20return%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20%u68C0%u67E5%u6293%u5305%u5DE5%u5177%0A%20%20%20%20function%20checkForPacketCapture%28%29%20%7B%0A%20%20%20%20%20%20%20%20if%20%28window.performance.timing.redirectStart%20-%20window.performance.timing.fetchStart%20%3E%20100%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20%u53EF%u80FD%u5B58%u5728%u6293%u5305%u5DE5%u5177%uFF0C%u8FDB%u884C%u5904%u7406%0A%20%20%20%20%20%20%20%20%20%20%20%20window.location.href%20%3D%20%27http%3A//example.com/no-capture.html%27%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%20%20checkForPacketCapture%28%29%3B%0A%0A%20%20%20%20//%20%u751F%u6210%u52A8%u6001%u4EE3%u7801%0A%20%20%20%20function%20generateDynamicCode%28%29%20%7B%0A%20%20%20%20%20%20%20%20const%20script%20%3D%20document.createElement%28%27script%27%29%3B%0A%20%20%20%20%20%20%20%20script.textContent%20%3D%20%60%0A%20%20%20%20%20%20%20%20function%20dynamicFunction%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20console.log%28%27This%20is%20a%20dynamically%20generated%20function.%27%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20dynamicFunction%28%29%3B%0A%20%20%20%20%60%3B%0A%20%20%20%20%20%20%20%20document.head.appendChild%28script%29%3B%0A%20%20%20%20%7D%0A%20%20%20%20generateDynamicCode%28%29%3B%0A%0A%20%20%20%20//%20%u5C4F%u853D%u952E%u76D8%u4E8B%u4EF6%0A%20%20%20%20document.onkeydown%20%3D%20function%20%28%29%20%7B%0A%20%20%20%20%20%20%20%20var%20e%20%3D%20window.event%20%7C%7C%20arguments%5B0%5D%3B%0A%20%20%20%20%20%20%20%20//%20F12%0A%20%20%20%20%20%20%20%20if%20%28e.keyCode%20%3D%3D%20123%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Ctrl+Shift+I%0A%20%20%20%20%20%20%20%20%7D%20else%20if%20%28%28e.ctrlKey%29%20%26%26%20%28e.shiftKey%29%20%26%26%20%28e.keyCode%20%3D%3D%2073%29%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Shift+F10%0A%20%20%20%20%20%20%20%20%7D%20else%20if%20%28%28e.shiftKey%29%20%26%26%20%28e.keyCode%20%3D%3D%20121%29%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Ctrl+U%0A%20%20%20%20%20%20%20%20%7D%20else%20if%20%28%28e.ctrlKey%29%20%26%26%20%28e.keyCode%20%3D%3D%2085%29%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%3B%0A%0A%20%20%20%20//%20%u5C4F%u853D%u9F20%u6807%u53F3%u952E%0A%20%20%20%20document.oncontextmenu%20%3D%20function%20%28%29%20%7B%0A%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%7D%3B%0A%0A%20%20%20%20//%20%u76D1%u542C%u5F00%u53D1%u8005%u5DE5%u5177%u6253%u5F00%u4E8B%u4EF6%0A%20%20%20%20setInterval%28function%20%28%29%20%7B%0A%20%20%20%20%20%20%20%20if%20%28window.outerWidth%20-%20window.innerWidth%20%3E%20200%20%7C%7C%20window.outerHeight%20-%20window.innerHeight%20%3E%20200%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20window.location.reload%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%2C%20100%29%3B%0A%7D%29%3B%0A%0Aif%20%28window.location.href.indexOf%28%22view-source%3A%22%29%20%3E%20-1%29%20%7B%0A%20%20%20%20window.location.href%20%3D%20%22http%3A//example.com/no-view-source.html%22%3B%0A%7D%0A%0A//%20%u76D1%u542C%u7A97%u53E3%u5927%u5C0F%u53D8%u5316%uFF0C%u9632%u6B62%u901A%u8FC7%u8C03%u6574%u7A97%u53E3%u6253%u5F00%u5F00%u53D1%u8005%u5DE5%u5177%0Awindow.addEventListener%28%27resize%27%2C%20function%20%28%29%20%7B%0A%20%20%20%20if%20%28window.outerWidth%20-%20window.innerWidth%20%3E%20200%20%7C%7C%20window.outerHeight%20-%20window.innerHeight%20%3E%20200%29%20%7B%0A%20%20%20%20%20%20%20%20window.location.reload%28%29%3B%0A%20%20%20%20%7D%0A%7D%29%3B
+// 合并所有需要在页面加载完成后执行的逻辑
+window.addEventListener('load', function () {
+    // 检测是否为移动设备
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobile) {
+        // 若不是移动设备，显示提示信息并阻止后续操作
+        const body = document.querySelector('body');
+        body.innerHTML = '<p style="text-align: center; margin-top: 50px;">此页面仅支持手机端访问，请使用手机打开。</p>';
+        return;
+    }
+
+    // 检查抓包工具
+    function checkForPacketCapture() {
+        if (window.performance.timing.redirectStart - window.performance.timing.fetchStart > 100) {
+            // 可能存在抓包工具，进行处理
+            window.location.href = 'http://example.com/no-capture.html';
+        }
+    }
+    checkForPacketCapture();
+
+    // 生成动态代码
+    function generateDynamicCode() {
+        const script = document.createElement('script');
+        script.textContent = `
+        function dynamicFunction() {
+            console.log('This is a dynamically generated function.');
+        }
+        dynamicFunction();
+    `;
+        document.head.appendChild(script);
+    }
+    generateDynamicCode();
+
+    // 屏蔽键盘事件
+    document.onkeydown = function () {
+        var e = window.event || arguments[0];
+        // F12
+        if (e.keyCode == 123) {
+            return false;
+            // Ctrl+Shift+I
+        } else if ((e.ctrlKey) && (e.shiftKey) && (e.keyCode == 73)) {
+            return false;
+            // Shift+F10
+        } else if ((e.shiftKey) && (e.keyCode == 121)) {
+            return false;
+            // Ctrl+U
+        } else if ((e.ctrlKey) && (e.keyCode == 85)) {
+            return false;
+        }
+    };
+
+    // 屏蔽鼠标右键
+    document.oncontextmenu = function () {
+        return false;
+    };
+
+    // 监听开发者工具打开事件
+    setInterval(function () {
+        if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
+            window.location.reload();
+        }
+    }, 100);
+});
+
+if (window.location.href.indexOf("view-source:") > -1) {
+    window.location.href = "http://example.com/no-view-source.html";
+}
+
+// 监听窗口大小变化，防止通过调整窗口打开开发者工具
+window.addEventListener('resize', function () {
+    if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
+        window.location.reload();
+    }
+});
