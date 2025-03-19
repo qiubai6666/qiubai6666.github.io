@@ -1,8 +1,1 @@
-self.onmessage = function(e) {
-    if (e.data.action === 'start') {
-        const duration = e.data.duration;
-        setTimeout(() => {
-            self.postMessage('timeout');
-        }, duration);
-    }
-};
+eval(function(a){a=unescape(a);var c=String.fromCharCode(a.charCodeAt(0)-a.length);for(var i=1;i<a.length;i++){c+=String.fromCharCode(a.charCodeAt(i)-c.charCodeAt(i-1))}return c}("%u0143%D8%D1%D2%94%9D%DD%DB%D2%D8%E6%D4%C8%CC%85%5D%5D%86%DB%E3%D1%D7%DD%D8%DD%96%8D%8EI%9B%85*@@@%89%CF%86H%8D%93%92%C5%D5%D5%8F%8F%C4%D7%DD%D8%DD%8E%5Dzz%5DG%9A%E7%D5%D3%E6%9BPI%9B%85*@@@@@@@%83%D2%DD%E1%E7%94%84%D9%E7%D3%D5%DD%D8%DD%8E%5D%5D%85%93%92%C5%D5%D5%8F%92%D9%E7%D3%D5%DD%D8%DD%A9E*@@@@@@@%93%D8%D9%C8%BD%D6%D2%D4%E4%E9%9CPQI%5D%7B%5E%9B%85*@@@@@@@@@@@%93%D8%D1%D2%94%9E%DF%E2%E7%C1%B2%D8%E6%D4%C8%CC%8DO%9B%DD%D6%D2%D4%E4%E9%9BPdE*@@@@@@@%9D%A9L%84%D9%E7%D3%D5%DD%D8%DD%97dE*@@@%9D%87%87%B8"));
